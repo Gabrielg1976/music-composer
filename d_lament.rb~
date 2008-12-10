@@ -10,9 +10,9 @@ Song.create('d_lament.mid') do
   tempo :moderatto
   time_signature 3, :on => 4
 
-  bernie.basic_rhythm(2.nd(Do), Do, Mi)
-  dalia.basic_rhythm(Fa, 2.nd(Fa), Mi)
-  gema.basic_rhythm(Mi, Do, 2.nd(Do))
+  bernie.basic_rythm(2.nd(Do), Do, Mi)
+  dalia.basic_rythm(Fa, 2.nd(Fa), Mi)
+  gema.basic_rythm(Mi, Do, 2.nd(Do))
 
   bernie.starts
   dalia.starts(1.bar.after(bernie))
