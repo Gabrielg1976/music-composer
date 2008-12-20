@@ -7,7 +7,7 @@ Song.create('d_lament.mid') do
   add :violin, :name => 'Bernie'
   add :cello, :name => 'Dalia'
   add :piano, :name => 'Gema'
-  tempo :moderatto
+  tempo "anflkaflda"
   time_signature 3, :on => 4
 
   bernie.basic_rhythm(2.nd(Do), Do, Mi)

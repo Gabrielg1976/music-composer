@@ -2,16 +2,17 @@ require 'midilib'
 require 'log4r'
 
 module MusicComposer
-  Do, Re, Mi, Fa, Sol, La, Si = 64, 66, 68, 69, 71, 73, 75 #2nd Do is 76
-  C, D, E, F, G, A, B = 64, 66, 68, 69, 71, 73, 75
-  Tempo = {:moderatto => 120}
+  C, D, E, F, G, A, B = 60, 62, 64, 65, 67, 69, 71
+  Tempo = {:moderatto => 120, :fast => 230}
   Instrument = {:piano => 0, :violin => 40, :cello => 42}
 
   class Song
     attr_accessor :beats_per_bar
     def initialize(filename)
       @filename = filename
-      @musicians = []
+      @voices = []
+      @key = "c"
+      @mode = "major"
       @logger = Log4r::Logger.new 'music_composer'
       @logger.outputters = Log4r::Outputter.stdout
     end
@@ -30,7 +31,7 @@ module MusicComposer
 
       delta = sequence.note_to_delta(@beat_length_name)
 
-      @musicians.each do |m|
+      @voices.each do |m|
         t = MIDI::Track.new(sequence)
         sequence.tracks << t
         t.name = m.name
@@ -48,9 +49,9 @@ module MusicComposer
     end
     def add(instrument, options)
       name = options[:name]
-      musician = Musician.new(name, instrument, self)
-      @musicians << musician
-      Song.add(name.downcase.to_sym) { musician }
+      voice = Voice.new(name, instrument, self)
+      @voices << voice
+      Song.add(name.downcase.to_sym) { voice }
     end
     def self.add(name, &block)
       define_method(name, &block)
@@ -69,7 +70,7 @@ module MusicComposer
                      end
     end
   end
-  class Musician
+  class Voice
     attr_accessor :name, :instrument
     def initialize(name, instrument, song)
       @name, @instrument, @song = name, Instrument[instrument], song
@@ -84,7 +85,7 @@ module MusicComposer
       @inner_position = (@inner_position + 1) % @song.beats_per_bar
       note
     end
-    def basic_rythm(*notes)
+    def basic_rhythm(*notes)
       @notes = notes
     end
     def starts(event = nil, options = nil)
